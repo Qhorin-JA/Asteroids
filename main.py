@@ -13,6 +13,10 @@ def main():
     # Tworzenie okna
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
+    # Tworzenie zegara i zmiennej delta time
+    clock = pygame.time.Clock()
+    dt = 0  # czas między klatkami (w sekundach)
+
     # Główna pętla gry
     while True:
         # Obsługa zdarzeń (np. zamknięcie okna)
@@ -25,6 +29,9 @@ def main():
 
         # Odświeżenie ekranu
         pygame.display.flip()
+
+        # Ograniczenie do 60 FPS i zapisanie delta time (w sekundach)
+        dt = clock.tick(60) / 1000
 
 if __name__ == "__main__":
     main()
