@@ -2,7 +2,8 @@
 # the open-source pygame library
 # throughout this file
 import pygame
-from constants import SCREEN_WIDTH, SCREEN_HEIGHT, ASTEROID_MIN_RADIUS, ASTEROID_KINDS, ASTEROID_SPAWN_RATE, ASTEROID_MAX_RADIUS 
+from constants import SCREEN_WIDTH, SCREEN_HEIGHT, ASTEROID_MIN_RADIUS, ASTEROID_KINDS, ASTEROID_SPAWN_RATE, ASTEROID_MAX_RADIUS, PLAYER_RADIUS
+from player import Player
 
 def main():
     pygame.init()
@@ -17,6 +18,8 @@ def main():
     clock = pygame.time.Clock()
     dt = 0  # czas między klatkami (w sekundach)
 
+    player = Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
+
     # Główna pętla gry
     while True:
         # Obsługa zdarzeń (np. zamknięcie okna)
@@ -26,6 +29,10 @@ def main():
 
         # Wypełnianie ekranu kolorem czarnym (RGB: 0, 0, 0)
         screen.fill((0, 0, 0))
+
+        player.update(dt)         # aktualizacja gracza
+
+        player.draw(screen)
 
         # Odświeżenie ekranu
         pygame.display.flip()
