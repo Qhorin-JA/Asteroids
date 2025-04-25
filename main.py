@@ -4,12 +4,23 @@
 import pygame
 from constants import SCREEN_WIDTH, SCREEN_HEIGHT, ASTEROID_MIN_RADIUS, ASTEROID_KINDS, ASTEROID_SPAWN_RATE, ASTEROID_MAX_RADIUS, PLAYER_RADIUS
 from player import Player
+from asteroid import Asteroid
+from asteroidfield import AsteroidField
 
 def main():
     pygame.init()
     print("Starting Asteroids!")
     print(f"Screen width: {SCREEN_WIDTH}")
     print(f"Screen height: {SCREEN_HEIGHT}")
+
+    # Grupy do aktualizacji i rysowania
+    updatable = pygame.sprite.Group()
+    drawable = pygame.sprite.Group()
+    asteroids = pygame.sprite.Group()
+
+    Player.containers = (updatable, drawable)
+    Asteroid.containers = (asteroids, updatable, drawable)
+    AsteroidField.containers = (updatable,)
 
     # Tworzenie okna
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
@@ -19,6 +30,7 @@ def main():
     dt = 0  # czas między klatkami (w sekundach)
 
     player = Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
+    field = AsteroidField()
 
     # Główna pętla gry
     while True:
@@ -30,9 +42,10 @@ def main():
         # Wypełnianie ekranu kolorem czarnym (RGB: 0, 0, 0)
         screen.fill((0, 0, 0))
 
-        player.update(dt)         # aktualizacja gracza
+        updatable.update(dt) # aktualizacja wszystkich obiektów
 
-        player.draw(screen)
+        for obj in drawable:  # rysowanie każdego obiektu
+            obj.draw(screen)
 
         # Odświeżenie ekranu
         pygame.display.flip()
