@@ -7,6 +7,7 @@ class Player(CircleShape):
     def __init__(self, x, y):
         super().__init__(x, y, PLAYER_RADIUS)
         self.rotation = 0
+        self.shoot_timer = 0  # Odliczanie czasu do kolejnego strzału
     
     def move(self, dt):
         forward = pygame.Vector2(0, 1).rotate(self.rotation)
@@ -18,6 +19,10 @@ class Player(CircleShape):
     def update(self, dt):
         keys = pygame.key.get_pressed()
 
+        # Zmniejszamy timer strzału
+        if self.shoot_timer > 0:
+            self.shoot_timer -= dt
+
         if keys[pygame.K_w]:
             self.move(dt)     # ruch do przodu
         if keys[pygame.K_s]:
@@ -26,8 +31,9 @@ class Player(CircleShape):
             self.rotate(-dt)  # obrót w lewo
         if keys[pygame.K_d]:
             self.rotate(dt)   # obrót w prawo
-        if keys[pygame.K_SPACE]:
+        if keys[pygame.K_SPACE] and self.shoot_timer <= 0:
             self.shoot()   # Strzelanie!
+            self.shoot_timer = PLAYER_SHOOT_COOLDOWN  # Restartujemy cooldown po strzale
 
     def triangle(self):
         forward = pygame.Vector2(0, 1).rotate(self.rotation)
